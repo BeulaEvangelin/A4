@@ -2,10 +2,10 @@
 //process-contact-form.php
 //receives user-submitted data
 
-$name = $_POST["name"];
-$email = $_POST["email"];
-$category_Interest = implode(', ', $_POST["categoryInterests"]);
-$role = $_POST["role"];
+$name = isset($_POST["name"]) ? $_POST["name"] : '';
+$email = isset($_POST["email"]) ? $_POST["email"] : '';
+$category_Interest = isset($_POST["categoryInterests"]) ? implode(', ', $_POST["categoryInterests"]) : '';
+$role = isset($_POST["role"]) ? $_POST["role"] : '';
 
 //saves the user data to the database table
 
@@ -17,16 +17,19 @@ $dbpassword = "";
 $pdo = new PDO($dsn, $dbusername, $dbpassword);
 
 //prepare
-$stmt = $pdo->prepare("INSERT INTO `contact_form`
+$stmt = $pdo->prepare("INSERT INTO `contact_form` 
 (`Submission_id`, `name`, `email`, `category_Interest`, `role`) 
 VALUES 
-(NULL,'$name','$email','$category_Interest','$role') ;");
+(NULL, :name, :email, :category_Interest, :role)");
 
-//execute
-$stmt->execute();
-
-$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-echo(json_encode($results));
-
-?>
+// execute with an array of parameters
+if ($stmt->execute([
+    ':name' => $name,
+    ':email' => $email,
+    ':category_Interest' => $category_Interest,
+    ':role' => $role
+])) {
+    echo json_encode(array("success" => true));
+} else {
+    echo json_encode(array("success" => false));
+}
