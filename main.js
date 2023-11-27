@@ -1,13 +1,15 @@
 console.log("ajax!");
 
-document.querySelector("#getDataPara").addEventListener("click", getData);
+
+document.querySelector("#contactPage").addEventListener("submit", submitData);
 
 let xhr = new XMLHttpRequest();
 
-function getData(event){
+function submitData(event){
+	event.preventDefault();
 	 
 	xhr.onreadystatechange = handlerFunction; 
-	xhr.open("GET", "contact-form.php", true); //true means it is asynchronous
+	xhr.open("POST", "contact-form.php", true);
 	xhr.send();
 }
 
@@ -19,25 +21,18 @@ function handlerFunction (event){
 		if (xhr.status === 200) {
 			console.log(xhr.responseText);
 			
-			let responseJSON = JSON.parse(xhr.responseText);
-			console.log(responseJSON);
+			let response = JSON.parse(xhr.responseText);
 
-			let div = document.createElement("div");
-			for(let i=0; i<responseJSON.length; i++){
-				let p = document.createElement("p");
-				let pText = document.createTextNode(`${responseJSON[i].personId}, 
-					${responseJSON[i].fName},
-					${responseJSON[i].lName},
-					${responseJSON[i].DOB}`)
-
-				p.appendChild(pText);
-				div.appendChild(p);
+			if (response.success) {
+				// Modify the DOM to show a confirmation message
+				document.getElementById("responseMessage").innerHTML = "Data entered successfully!";
+			} else {
+				// Modify the DOM to show an error message
+				document.getElementById("responseMessage").innerHTML = "Error: Unable to submit data.";
 			}
-
-			document.querySelector("#personData").appendChild(div);
-		
-		} else {
-			//status code error
-		}
+		  } else {
+			// Handle errors from the server
+			console.error("Error:", xhr.status);
+		  }
 	}
 };
