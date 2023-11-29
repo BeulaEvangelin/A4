@@ -24,14 +24,14 @@ function handlerFunction (event){
 			let response = JSON.parse(xhr.responseText);
 
 			if (response.success) {
-				// Modify the DOM to show a confirmation message
+				
 				document.getElementById("responseMessage").innerHTML = "Data entered successfully!";
 			} else {
-				// Modify the DOM to show an error message
+				
 				document.getElementById("responseMessage").innerHTML = "Error: Unable to submit data.";
 			}
 		  } else {
-			// Handle errors from the server
+			
 			console.error("Error:", xhr.status);
 		  }
 	}

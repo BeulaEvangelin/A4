@@ -22,7 +22,7 @@ $stmt = $pdo->prepare("INSERT INTO `contact_form`
 VALUES 
 (NULL, :name, :email, :category_Interest, :role)");
 
-// execute with an array of parameters
+// execute
 if ($stmt->execute([
     ':name' => $name,
     ':email' => $email,
