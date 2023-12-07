@@ -1,7 +1,9 @@
 console.log("ajax!");
 
 
-document.querySelector("#contactPage").addEventListener("submit", submitData);
+const form = document.querySelector("#contactPage"); 
+
+form.addEventListener("submit", submitData);
 
 let xhr = new XMLHttpRequest();
 
